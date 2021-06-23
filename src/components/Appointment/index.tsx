@@ -37,7 +37,7 @@ export function Appointment({ data, ...rest }: Props) {
 
     return (
 
-        <RectButton>
+        <RectButton {...rest}>
 
             <View style={styles.container}>
 

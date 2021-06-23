@@ -5,6 +5,7 @@ import { useNavigation } from '@react-navigation/native';
 import { styles } from './style';
 import IllustrationImg from '../../assets/illustration.png';
 import { ButtonIcon } from '../../components/ButtonIcons';
+import { Background } from '../../components/Backgorund';
 
 export function SignIn(){
 
@@ -16,36 +17,38 @@ export function SignIn(){
 
   return(
 
-    <View style={styles.container} >
+    <Background>
+      <View style={styles.container} >
 
-      <Image 
-        source={IllustrationImg} 
-        style={styles.image}
-        resizeMode="stretch"
-        resizeMethod="scale"
-      />
-
-      <View style={styles.content} >
-
-        <Text style={styles.title}>
-          Conecte-se {'\n'}
-          e organize suas {'\n'}
-          jogatinas
-        </Text>
-
-        <Text style={styles.subtitle}>
-          Crie grupos para jogar seus games {'\n'}
-          favoritos com seus amigos
-        </Text>
-
-        <ButtonIcon 
-          title="Entrar com Discord"
-          onPress={handleSignIn}
+        <Image 
+          source={IllustrationImg} 
+          style={styles.image}
+          resizeMode="stretch"
+          resizeMethod="scale"
         />
 
-      </View>
+        <View style={styles.content} >
 
-    </View>
+          <Text style={styles.title}>
+            Conecte-se {'\n'}
+            e organize suas {'\n'}
+            jogatinas
+          </Text>
+
+          <Text style={styles.subtitle}>
+            Crie grupos para jogar seus games {'\n'}
+            favoritos com seus amigos
+          </Text>
+
+          <ButtonIcon 
+            title="Entrar com Discord"
+            onPress={handleSignIn}
+          />
+
+        </View>
+
+      </View>
+    </Background>
 
   );
 }
