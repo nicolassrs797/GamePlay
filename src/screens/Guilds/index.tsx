@@ -16,15 +16,15 @@ export function Guilds({handleGuildSelect}: Props) {
         {
             id: '1',
             name: 'Lendários',
-            icon: null,
+            icon: 'image.png',
             owner: true
         },
         {
             id: '2',
             name: 'Lendários',
-            icon: null,
+            icon: 'image.png',
             owner: false
-        }
+        },
     ];
 
     return (
@@ -38,9 +38,11 @@ export function Guilds({handleGuildSelect}: Props) {
                         onPress={() => handleGuildSelect(item)}
                     />
                 )}
-                ItemSeparatorComponent={() => <ListDivider/>}
+                ItemSeparatorComponent={() => <ListDivider isCentered/>}
                 showsHorizontalScrollIndicator={false}
                 style={styles.guilds}
+                contentContainerStyle={{ paddingBottom: 68, paddingTop: 103 }}
+                ListHeaderComponent={()=> <ListDivider isCentered/>}
             />
         </View>
     );

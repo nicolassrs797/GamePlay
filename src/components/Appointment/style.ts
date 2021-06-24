@@ -51,6 +51,14 @@ export let styles = StyleSheet.create({
         fontSize: 13,
         marginLeft: 7,
         marginRight: 24
+    },
+    guildIconBorder: {
+        width: 64,
+        height: 68,
+        borderRadius: 8,
+        alignItems: 'center',
+        justifyContent: 'center',
+        marginRight: 20
     }
 
 })

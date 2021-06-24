@@ -31,13 +31,17 @@ export function AppointmentCreate() {
         setOpenGuildsModal(true);
     };
 
+    function handleCloseGuilds() {
+        setOpenGuildsModal(false);
+    };
+
     function handleGuildSelect(guildSelected: GuildProps) {
         setOpenGuildsModal(false);
         setGuild(guildSelected);
     };
 
     function handleCategorySelect(categoryId: string) {
-        categoryId === category ? setCategory('') : setCategory(categoryId);
+        setCategory(categoryId);
     };
 
     return (
@@ -45,9 +49,9 @@ export function AppointmentCreate() {
             style={styles.container}
             behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
         >
-            <ScrollView>
+            <Background>
+                <ScrollView>
 
-                <Background>
 
                     <Header
                         title="Agendar Partida"
@@ -86,7 +90,7 @@ export function AppointmentCreate() {
                         <View style={styles.field}>
 
                             <View>
-                                <Text style={styles.label}>
+                                <Text style={[styles.label, { marginBottom: 12}]}>
                                     Dia e mês
                                 </Text>
 
@@ -100,7 +104,7 @@ export function AppointmentCreate() {
                             </View>
 
                             <View>
-                                <Text style={styles.label}>
+                                <Text style={[styles.label, { marginBottom: 12}]}>
                                     Hora e minuto
                                 </Text>
 
@@ -134,11 +138,11 @@ export function AppointmentCreate() {
                         <Button title="Agendar"/>
                     </View>
                     
-                </Background>
+                </ScrollView>
+            </Background>
 
-            </ScrollView>
 
-            <ModalView visible={openGuildsModal}>
+            <ModalView visible={openGuildsModal} closeModal={handleCloseGuilds}>
                 <Guilds handleGuildSelect={handleGuildSelect}/>
             </ModalView>
 

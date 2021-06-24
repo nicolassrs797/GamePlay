@@ -38,7 +38,7 @@ export function Home() {
                 id: '1',
                 name: 'Lendários',
                 icon: null,
-                owner: true,
+                owner: false,
             },
             category: '1',
             date: '22/06 às 20:00h',
@@ -79,20 +79,22 @@ export function Home() {
                     subtitle="Total 2"
                 />
 
-                <FlatList
-                    data={appointments}
-                    keyExtractor={item => item.id}
-                    renderItem={({ item }) => (
-                    <Appointment
-                        data={item} 
-                        onPress={handleAppointmentDetails}
-                    />
-                    )}
-                    ItemSeparatorComponent={() => <ListDivider/>}
-                    style={ styles.matches }
-                    showsVerticalScrollIndicator={false}
-                />
             </View>
+            
+            <FlatList
+                data={appointments}
+                keyExtractor={item => item.id}
+                renderItem={({ item }) => (
+                <Appointment
+                    data={item} 
+                    onPress={handleAppointmentDetails}
+                />
+                )}
+                ItemSeparatorComponent={() => <ListDivider/>}
+                style={ styles.matches }
+                showsVerticalScrollIndicator={false}
+                contentContainerStyle={{ paddingBottom: 69 }}
+            />
         </Background>
     );
 };

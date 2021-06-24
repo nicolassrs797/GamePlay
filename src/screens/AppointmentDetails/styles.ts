@@ -24,7 +24,8 @@ export let styles = StyleSheet.create({
         fontSize: 13,
         color: theme.colors.heading,
         paddingHorizontal: 24,
-        marginBottom: 24
+        marginBottom: 24,
+        lineHeight: 21
     },
     members: {
         marginTop: 21,
