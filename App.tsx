@@ -7,6 +7,7 @@ import { Rajdhani_500Medium, Rajdhani_700Bold } from '@expo-google-fonts/rajdhan
 import { Background } from './src/components/Backgorund';
 
 import { Routes } from './src/routes';
+import { AuthProvider } from './src/hooks/auth';
 
 import AppLoading from 'expo-app-loading';
 
@@ -32,7 +33,12 @@ export default function App() {
         backgroundColor="transparent"
         translucent
       />
-      <Routes />
+
+      <AuthProvider>
+        <Routes />
+      </AuthProvider>
+
+
     </Background>
   );
 }
