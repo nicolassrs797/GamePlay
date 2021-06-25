@@ -1,19 +1,39 @@
 import React from 'react';
-import { Image } from 'react-native';
+import { View, Image } from 'react-native';
 
 import { styles } from './style';
+import DiscordSvg from '../../assets/discord.svg'
 
-export function GuildIcon() {
+let { CDN_IMAGE } = process.env;
 
-    let uri = 'https://lolstatic-a.akamaihd.net/frontpage/apps/prod/harbinger-l10-website/pt-br/production/pt-br/static/placeholder-1c66220c6149b49352c4cf496f70ad86.jpg'
+type Props = {
+    guildId: string;
+    iconID: string | null;
+};
+
+export function GuildIcon({ guildId, iconID }: Props) {
+
+    let uri = `${CDN_IMAGE}/icons/${guildId}/${iconID}.png`;
 
     return (
 
-        <Image
-            source={{ uri }}
-            style={styles.image}
-            resizeMode='cover'
-        />
+        <View style={styles.container}>
+
+            {
+                iconID ? 
+                <Image
+                    source={{ uri }}
+                    style={styles.image}
+                    resizeMode='cover'
+                />
+                :
+                <DiscordSvg
+                    width={40}
+                    height={40}
+                />
+            }
+
+        </View>
 
     );
 };

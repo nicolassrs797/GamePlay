@@ -1,5 +1,6 @@
 import React from 'react';
 import { StatusBar } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import { useFonts } from 'expo-font';
 import { Inter_400Regular, Inter_500Medium } from '@expo-google-fonts/inter';
@@ -11,6 +12,8 @@ import { AuthProvider } from './src/hooks/auth';
 
 import AppLoading from 'expo-app-loading';
 
+import { COLLECTION_APPOINTMENTS } from './src/configs/database';
+
 export default function App() {
 
   let [fontsLoaded] = useFonts({
@@ -19,6 +22,10 @@ export default function App() {
     Rajdhani_500Medium,
     Rajdhani_700Bold,
   });
+
+  async function erase() {
+    await AsyncStorage.removeItem(COLLECTION_APPOINTMENTS);
+  }
 
   if (!fontsLoaded) {
     return (

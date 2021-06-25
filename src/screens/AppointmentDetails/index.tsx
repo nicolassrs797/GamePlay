@@ -1,58 +1,96 @@
-import React from 'react';
-import { View, ImageBackground, Text, FlatList } from 'react-native';
+import React, {useState, useEffect} from 'react';
+import { View, ImageBackground, Text, FlatList, Alert, Platform } from 'react-native';
 import { BorderlessButton } from 'react-native-gesture-handler';
+import { useRoute } from '@react-navigation/native';
+import * as Linking from 'expo-linking';
 
 import { Header } from '../../components/Header';
 import { ListHeader } from '../../components/ListHeader';
-import { Member } from '../../components/Member';
+import { Member, MemberProps } from '../../components/Member';
 import { ListDivider } from '../../components/ListDivider';
 import { ButtonIcon } from '../../components/ButtonIcons';
+import { AppointmentProps } from '../../components/Appointment';
+import { Loading } from '../../components/Loading';
 
-import { styles } from './styles';
 import { Background } from '../../components/Backgorund';
-import { Fontisto } from '@expo/vector-icons';
 import { theme } from '../../global/styles/theme';
 import BannerImg from '../../assets/banner.png';
+import { Fontisto } from '@expo/vector-icons';
+import { api } from '../../services/api';
+import { styles } from './styles';
+import { Share } from 'react-native';
+
+type Params = {
+    guildSelected: AppointmentProps,
+};
+
+type GuildWidget = {
+    id: string,
+    name: string,
+    instant_invite: string,
+    members: MemberProps[],
+};
 
 export function AppointmentDetails() {
 
-    let members = [
-        {
-            id: '1',
-            username: 'Teixeira',
-            avatar_url: 'https://scontent.fgyn22-1.fna.fbcdn.net/v/t1.6435-9/174539829_3668147673295450_7966367934281302858_n.jpg?_nc_cat=111&ccb=1-3&_nc_sid=09cbfe&_nc_eui2=AeG2EPpB0uuYMC9D_J2bh2btAdcHTdrFGbkB1wdN2sUZuRH8vUgSVSTYgBrFVr-49U7w5X13TLcfJif3fRB-PtZt&_nc_ohc=ws5ie0OZvxgAX_DYz_k&_nc_ht=scontent.fgyn22-1.fna&oh=56923a3a0a66eae5896dcdbde65a7a69&oe=60D93B17',
-            status: 'online'
-        },
-        {
-            id: '2',
-            username: 'Marinho',
-            avatar_url: 'https://scontent.fgyn22-1.fna.fbcdn.net/v/t1.6435-9/46334726_1415544285244663_4881238986263101440_n.jpg?_nc_cat=107&ccb=1-3&_nc_sid=09cbfe&_nc_eui2=AeHJ3YJKBc67ZiphRPuwXPvKQ8YonidUSylDxiieJ1RLKQgT8Gz05mqKrr0qfBsXUORO_ElT_zSMVj_zAVP3cSGH&_nc_ohc=NRJYFht1jwoAX9wxnPl&_nc_ht=scontent.fgyn22-1.fna&oh=2731500adc904b127c6ac75932ceea21&oe=60D7D720',
-            status: 'offline'
-        },
-        {
-            id: '3',
-            username: 'França',
-            avatar_url: 'https://scontent.fgyn22-1.fna.fbcdn.net/v/t31.18172-8/13710689_1258141047544011_464059006515415674_o.jpg?_nc_cat=105&ccb=1-3&_nc_sid=09cbfe&_nc_eui2=AeERtwbyU245m6gaJEPkO4_nJbaYgZwUQ6AltpiBnBRDoJEGCansVUWR9vvmHZCWBIYL9drCb7zWyaauMTyXnYJy&_nc_ohc=ZXtKFB_GKwgAX8GU2X2&_nc_ht=scontent.fgyn22-1.fna&oh=662761d36a33e3922ea0beff754bec38&oe=60D95DE6',
-            status: 'offline'
-        }, 
-        
-    ]
+    let route = useRoute();
+    let { guildSelected } = route.params as Params;
+    let [widget, setWidget] = useState<GuildWidget>({} as GuildWidget);
+    let [loading, setLoading] = useState(true);
+
+    async function fetchGuildWidget() {
+        try {
+            
+            let response = await api.get(`guilds/${guildSelected.guild.id}/widget.json`);
+
+            setWidget(response.data);
+
+        } catch (error) {
+            Alert.alert('Oops! Verifique as configurações do servidor! Será que o Widget está habilitado?');
+            widget={ } as GuildWidget;
+        } finally{
+            setLoading(false);
+        };
+    };
+
+    function handleShareInvite(){
+        let message = Platform.OS === 'ios' ? `Junte-se a ${guildSelected.guild.name}` : widget.instant_invite;
+
+        Share.share({
+            message,
+            url: widget.instant_invite
+        })
+    };
+
+    function handleOpenGuild(){
+        Linking.openURL(widget.instant_invite);
+    };
+
+    useEffect(() => {
+        fetchGuildWidget();
+    },[])
 
     return (
         <Background>
 
             <Header
                 title="Detalhes"
-                action={
-                    <BorderlessButton>
-
-                        <Fontisto
-                            name="share"
-                            size={24}
-                            color={theme.colors.primary}
-                        />
-
-                    </BorderlessButton>
+                action={<>
+                        {
+                            loading ? <Loading/> : 
+                            widget.instant_invite ? 
+                            <BorderlessButton>
+                                <Fontisto
+                                    name="share"
+                                    size={24}
+                                    color={theme.colors.primary}
+                                    onPress={handleShareInvite}
+                                />
+                            </BorderlessButton>
+                             :
+                            <View style={{width: 24}}/>
+                        }
+                        </>
                 }
             /> 
             
@@ -61,30 +99,39 @@ export function AppointmentDetails() {
                 style={styles.banner}
             >
                 <Text style={styles.title}>
-                    Lendários
+                    {guildSelected.guild.name}
                 </Text>
 
                 <Text style={styles.subtitle}>
-                    É hoje que vamos chegar ao challenger sem perder uma partida da md10
+                    {guildSelected.description}
                 </Text>
 
             </ImageBackground>
 
-            <ListHeader title="Jogadores" subtitle="total 3" />
+            {
+                loading ? <Loading/> :
+                widget.instant_invite ? 
+                <>
+                    <ListHeader title="Jogadores" subtitle={`Total ${widget.members.length}`} />
 
-            <FlatList
-                data={members}
-                style={styles.members}
-                keyExtractor={item => item.id}
-                renderItem={( {item} ) => (
-                    <Member data={item} />
-                )}
-                ItemSeparatorComponent={() => <ListDivider/>}
-            />
-            
-            <View style={styles.footer}>
-                <ButtonIcon title="Entrar na partida"/>
-            </View>
+                    <FlatList
+                        data={widget.members}
+                        style={styles.members}
+                        keyExtractor={item => item.id}
+                        renderItem={( {item} ) => (
+                            <Member data={item} />
+                        )}
+                        ItemSeparatorComponent={() => <ListDivider isCentered/>}
+                    />
+
+                    <View style={styles.footer}>
+                        <ButtonIcon 
+                            title="Entrar na partida"
+                            onPress={handleOpenGuild}
+                        />
+                    </View>
+                </> : <></>
+            }
 
         </Background>
     )

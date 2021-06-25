@@ -1,0 +1,9 @@
+let DATABASE_NAME = '@GamePlay';
+
+let COLLECTION_USERS = `${DATABASE_NAME}:user`;
+let COLLECTION_APPOINTMENTS = `${DATABASE_NAME}:appointments`;
+
+export {
+    COLLECTION_APPOINTMENTS,
+    COLLECTION_USERS
+};
